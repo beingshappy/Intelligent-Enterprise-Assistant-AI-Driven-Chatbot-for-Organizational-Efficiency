@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intelligent Enterprise Assistant | AI-Driven Efficiency</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/style.css?v=3.1">
+</head>
+<body class="dark-theme">
+    <div id="loader" class="loader-overlay">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Login/Register Section -->
+    <section id="auth-section" class="auth-container">
+        <div class="glass-card auth-card">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <span>Intelligent Enterprise Assistant</span>
+            </div>
+            <p>Support & Document Intelligence</p>
+            
+            <div id="login-form">
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="login-email" placeholder="Email Address" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="login-password" placeholder="Password" required>
+                </div>
+                <button onclick="handleLogin()" class="btn-primary">Sign In</button>
+                <div class="auth-toggle">
+                    Don't have an account? <a href="#" onclick="toggleAuthForm('signup')">Sign Up</a>
+                </div>
+            </div>
+
+            <div id="signup-form" class="hidden">
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="signup-name" placeholder="Full Name" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="signup-email" placeholder="Work Email" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="signup-password" placeholder="Password" required>
+                </div>
+                <button onclick="handleRegister()" class="btn-primary">Create Account</button>
+                <div class="auth-toggle">
+                    Already registered? <a href="#" onclick="toggleAuthForm('login')">Sign In</a>
+                </div>
+            </div>
+
+            <div id="otp-form" class="hidden">
+                <h2>Security Verification</h2>
+                <p>Please enter the 6-digit code sent to your terminal.</p>
+                <div class="input-group">
+                    <i class="fas fa-key"></i>
+                    <input type="text" maxlength="6" id="otp-code" placeholder="Enter Code">
+                </div>
+                <button onclick="handleVerifyOTP()" class="btn-primary">Verify & Access</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Application Dashboard -->
+    <main id="app-section" class="hidden">
+        <!-- Mobile Header (Visible only on <768px) -->
+        <header class="mobile-header">
+            <button class="menu-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="mobile-logo">
+                <i class="fas fa-brain"></i>
+                <span>Enterprise AI</span>
+            </div>
+            <div class="mobile-actions"></div>
+        </header>
+
+        <!-- Sidebar Overlay (Tap to close drawer) -->
+        <div id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+        <!-- Sidebar -->
+        <nav class="sidebar glass-effect">
+            <div class="sidebar-header">
+                <i class="fas fa-building-columns"></i>
+                <span>ADMIN PORTAL</span>
+            </div>
+            
+            <ul class="nav-links">
+                <li class="active" onclick="showTab('chat')">
+                    <i class="fas fa-comment-dots"></i> <span>AI Assistant</span>
+                </li>
+                <li onclick="showTab('documents')">
+                    <i class="fas fa-folder-open"></i> <span>Document Center</span>
+                </li>
+                <li id="admin-nav" class="hidden" onclick="showTab('admin')">
+                    <i class="fas fa-chart-line"></i> <span>Analytics Panel</span>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <img src="https://ui-avatars.com/api/?name=Admin&background=6366f1&color=fff" alt="Avatar" id="user-avatar">
+                    <div class="user-details">
+                        <span id="user-name">Employee</span>
+                        <span id="user-role">Role</span>
+                    </div>
+                </div>
+                <button onclick="auth.logout()" class="btn-logout" title="Sign Out">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Exit</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Content Area -->
+        <div class="content">
+            <!-- Chat Tab -->
+            <section id="chat-tab" class="tab-content active">
+                <div class="chat-container glass-effect">
+                    <div class="chat-header">
+                        <div class="status-indicator"></div>
+                        <span>Enterprise AI Support (Online)</span>
+                    </div>
+                    <div id="chat-messages" class="chat-messages">
+                        <div class="msg bot-msg">
+                            <div class="msg-content">Welcome to the Enterprise Assistant. How can I help you today?</div>
+                        </div>
+                        
+                        <!-- Typing Indicator (Moved inside for better scroll tracking) -->
+                        <div id="typing-indicator" class="typing-indicator hidden">
+                            <div class="pulse-dots">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <span id="typing-text" class="typing-text">Searching Knowledge Base...</span>
+                        </div>
+                    </div>
+
+                    <div class="chat-input-area">
+                        <input type="text" id="chat-input" placeholder="Ask a question about HR, IT, or company policies...">
+                        <button onclick="sendMessage()" id="send-btn" class="btn-send">
+                            <span>Send</span>
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Documents Tab -->
+            <section id="documents-tab" class="tab-content">
+                <div class="doc-header">
+                    <h2>Documents Center</h2>
+                    <div class="upload-zone glass-card" onclick="document.getElementById('file-input').click()">
+                        <i class="fas fa-file-export"></i>
+                        <p>Click to upload PDF, DOCX, or Image files</p>
+                        <input type="file" id="file-input" class="hidden" onchange="uploadDocument(this.files[0])">
+                    </div>
+                </div>
+                <div id="doc-list" class="doc-grid">
+                    <!-- Dynamic Document Cards -->
+                </div>
+            </section>
+
+            <!-- Admin Tab -->
+            <section id="admin-tab" class="tab-content">
+                <div class="admin-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 25px;">
+                    <h2>System Analytics Dashboard</h2>
+                    <button onclick="adminDashboard.refreshData()" class="btn-secondary" style="width:auto; padding: 10px 20px;">
+                        <i class="fas fa-sync-alt"></i> Force Refresh
+                    </button>
+                </div>
+                <div class="admin-grid">
+                    <!-- Stat Cards -->
+                    <div class="stat-card glass-card">
+                        <h3>Total Queries</h3>
+                        <p id="stat-chats">0</p>
+                    </div>
+                    <div class="stat-card glass-card">
+                        <h3>Total Documents</h3>
+                        <p id="stat-docs">0</p>
+                    </div>
+                    <div class="stat-card glass-card">
+                        <h3>CPU Usage</h3>
+                        <div class="meter-bar"><div id="cpu-bar" style="width: 0%"></div></div>
+                        <span id="cpu-text">0%</span>
+                    </div>
+                    <div class="stat-card glass-card">
+                        <h3>Memory Usage</h3>
+                        <div class="meter-bar"><div id="ram-bar" style="width: 0%"></div></div>
+                        <span id="ram-text">0%</span>
+                    </div>
+
+                    <!-- Charts Area -->
+                    <div class="chart-container glass-card full-width">
+                        <h3>System Activity Analysis</h3>
+                        <canvas id="activityChart"></canvas>
+                    </div>
+
+                    <!-- User Table -->
+                    <div class="table-container glass-card full-width">
+                        <h3>Employee Access Logs</h3>
+                        <table id="user-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Access Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+
+                    <!-- Global Chat Logs (Requirement 5.2) -->
+                    <div class="table-container glass-card full-width">
+                        <h3>Global Intelligence Audit Logs</h3>
+                        <table id="logs-table">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>User</th>
+                                    <th>Query</th>
+                                    <th>Response Preview</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Rendered via:
+                                const timeStr = log.timestamp || log.created_at;
+                                const time = timeStr ? new Date(timeStr).toLocaleTimeString() : 'Recent';
+                                const userEmail = log.user_email || log.user_id || 'System';
+                                const userRef = userEmail.split('@')[0];
+                                const queryText = log.message || log.query || 'Admin Interaction';
+                                const responseText = log.response || log.content || 'Processing...';
+                                const preview = responseText.length > 60 ? responseText.substring(0, 60) + '...' : responseText;
+                                -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="js/auth.js?v=3.2"></script>
+    <script src="js/chat.js?v=3.2"></script>
+    <script src="js/admin.js?v=3.2"></script>
+    <script src="js/main.js?v=3.1"></script>
+</body>
+</html>
