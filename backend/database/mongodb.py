@@ -1,6 +1,7 @@
 import os
 from motor.motor_asyncio import AsyncIOMotorClient
 from dotenv import load_dotenv
+import asyncio
 
 load_dotenv()
 
@@ -11,17 +12,28 @@ class Database:
     async def connect_to_mongodb(self):
         uri = os.getenv("MONGODB_URI", "mongodb://localhost:27017")
         db_name = os.getenv("DATABASE_NAME", "enterprise_assistant")
-        try:
-            # 5 second timeout for demo stability
-            self.client = AsyncIOMotorClient(uri, serverSelectionTimeoutMS=5000)
-            self.db = self.client[db_name]
-            # Simple ping to verify connection
-            await self.client.admin.command('ping')
-            print(f" [OK] DATABASE: Connected to {db_name}")
-        except Exception as e:
-            print(f" [!] DATABASE ERROR: {e}")
-            print(" [!] WARN: System running in 'Degraded Mode' (Limited History)")
-            self.db = None
+        
+        # Adaptive Retry Strategy (Stabilizes startup if DB is slow)
+        max_retries = 5
+        retry_delay = 5 # seconds
+        
+        for i in range(max_retries):
+            try:
+                # 5 second timeout for demo stability
+                self.client = AsyncIOMotorClient(uri, serverSelectionTimeoutMS=5000)
+                self.db = self.client[db_name]
+                # Simple ping to verify connection
+                await self.client.admin.command('ping')
+                print(f" [OK] DATABASE: Connected to {db_name}")
+                return # Success
+            except Exception as e:
+                print(f" [!] DATABASE ATTEMPT {i+1} FAILED: Retrying in {retry_delay}s...")
+                if i == max_retries - 1:
+                    print(f" [!] FINAL DATABASE ERROR: {e}")
+                    print(" [!] WARN: System running in 'Degraded Mode' (Limited History)")
+                    self.db = None
+                else:
+                    await asyncio.sleep(retry_delay)
 
     async def close_mongodb_connection(self):
         if self.client:

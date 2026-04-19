@@ -30,7 +30,7 @@ Isse aapke computer ke baki programs kharab nahi hote aur project stable rehta h
 
 ```powershell
 # 1. Virtual environment create karein
-python -m venv venv
+py -m venv venv
 
 # 2. Use activate karein
 .\venv\Scripts\activate
@@ -62,42 +62,41 @@ ACCESS_TOKEN_EXPIRE_MINUTES=1440
 
 ---
 
-## 📂 Step 6: AI Models aur Demo Data Setup
+## 📂 Step 6: AI Models aur Demo Data Setup (MANDATORY)
 
-Jab aap pehli baar project run karenge, toh AI models (T5) internet se download honge (Approx 1-2 GB). 
-
-Lekin uske pehle demo data (Accounts) load karna zaroori he:
+> [!CAUTION]
+> **IMPORTANT**: Naye device par database khali hota he. Agar aap ye step miss karenge toh login par "Invalid email or password" error aayega.
 
 ```powershell
-# Terminal me ye run karein
-python seed_demo_data.py
+# Database me demo accounts banane ke liye ye run karein:
+py seed_demo_data.py
 ```
 
-Isse aapka **Admin** (`admin@company.com`) aur **Employee** (`employee@company.com`) accounts ready ho jayenge.
+Isse aapka **Admin** (`admin@company.com` / `admin123`) aur **Employee** (`employee@company.com` / `employee123`) accounts ready ho jayenge.
 
 ---
 
 ## 🚀 Step 7: Project Launch (Final Step)
 
-Sab kuch ready he! Ab bus ye command run karein:
+Sab kuch ready he! Ab bus ye launcher command run karein:
 
 ```powershell
-# Isse backend server start ho jayega
-python run_demo.py
+# Isse backend aur frontend dono ek saath start ho jayenge
+py run_demo.py
 ```
 
-Ab apne browser me `frontend/index.html` file open karein (Live Server plugin use karein ya direct file per double click karein).
+System automatically browser me **http://localhost:3000** open kar dega.
 
 ---
 
 ## ⚠️ Troubleshooting (Common Problems)
 
 ### 1. "Failed to fetch" error
-*   **Fix**: Check karein ki aapne `python run_demo.py` chala rakha he ya nahi.
-*   Check karein `frontend/js/auth.js` me `API_URL` me `localhost` likha he ya nahi.
+*   **Fix 1**: Ensure karein ki aapne backend server chala rakha he.
+*   **Fix 2**: Browser me **Ctrl + F5** dabaiye (Hard Refresh). Maine `auth.js` ko stable kar diya he, toh ye issue ab nahi aayega.
 
-### 2. "ModuleNotFoundError"
-*   **Fix**: Check karein aapne `venv` activate kiya he aur `pip install` successfully khatam hua he.
+### 2. "Invalid email or password" 
+*   **Fix**: Yani aapne Step 6 (`py seed_demo_data.py`) run nahi kiya he. Ise run karein aur default passwords use karein.
 
 ### 3. Database Connection Error
 *   **Fix**: Ensure kijiye ki MongoDB Service background me "Running" state me he (Task Manager -> Services me check karein).

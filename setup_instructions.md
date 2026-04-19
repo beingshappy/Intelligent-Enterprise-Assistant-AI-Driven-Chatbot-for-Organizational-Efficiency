@@ -1,3 +1,10 @@
+"Mere project folder me 'ULTIMATE_HINGLISH_SETUP.md' file he. Use read karo aur usme diye gaye steps follow karke project ko naye device par setup aur run karo. Make sure Step 6 (Seeding) aur Step 7 (Launch) success ho jayein."
+
+"Failed to fetch error aa raha he. Please backend/main.py ki CORS settings me Port 3000 aur 5500 ko explicitly allow karo, aur frontend/js/auth.js me API_URL ko 'http://127.0.0.1:8000/api' par set karke stabilize karo."
+
+
+
+
 # Intelligent Enterprise Assistant - Setup Instructions
 
 Follow these steps to set up and run the production-ready Enterprise AI Chatbot locally.

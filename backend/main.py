@@ -17,11 +17,19 @@ logger = logging.getLogger(__name__)
 
 app = FastAPI(title="Intelligent Enterprise Assistant AI")
 
-# CORS Middleware
+# CORS Middleware (Hardened for local networking stability)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=False, # We use Bearer tokens, so we don't need credentials/cookies
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:5500",
+        "http://127.0.0.1:5500",
+        "http://localhost:8000",
+        "http://127.0.0.1:8000",
+        "*" 
+    ],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )

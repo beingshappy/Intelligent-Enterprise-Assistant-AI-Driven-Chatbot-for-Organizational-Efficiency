@@ -1,4 +1,5 @@
-const API_URL = 'http://localhost:8000/api';
+// Elite Dynamic API Resolution: Prioritizes absolute IPv4 (127.0.0.1) for Windows stability
+const API_URL = 'http://127.0.0.1:8000/api';
 
 class AuthService {
     constructor() {
